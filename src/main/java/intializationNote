@@ -1,0 +1,232 @@
+this line is required to configure AssetLib-Module without error
+===================================================================
+
+
+Click File--- >new -->Import Module
+
+First of all (add/Check) those lines existence
+//---> in app.gradle    compile project(":AssetLib-module") in dependencies {}_array
+//---> setting.gradle    include ':app',':AssetLib-module'
+//---> you must  Create App Class that  extent AppConfig class from defaultIntializarion-->package.
+      ---then define it  in your manifest inside <Application name="yourAppName">
+
+==========================================================================================
+ Realm instance :-  (Musts)
+================================
+
+Step 1:
+        Add the class path dependency to the project level build.gradle file.dependencies
+        buildscript {
+            repositories {
+                jcenter()
+            }
+            dependencies {
+                    ///Realm
+                classpath "io.realm:realm-gradle-plugin:4.1.0"
+                  //or what ever vertion you are using
+            }
+        }
+
+Step 2:   Then Apply the realm-android plugin to the top of the application level build.gradle file.
+           apply plugin: 'realm-android'
+
+==============================================================================
+XML to jason lib :-  (Must)
+============
+allprojects {
+    repositories {
+        jcenter()
+        ...
+        /// XML to jason for Assest-lib
+           maven { url "https://jitpack.io" }
+        ...
+}}
+====================================================================================================
+2-for butterknif :-   (Must)
+=========================
+ ----->   this added to add inside project gradle
+          dependencies {
+         ////butterknife
+                       classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
+          }
+  ----->  Note that you can't get use of butterknife that included in assest module
+  ---->   Note must be this version cause it is Comparable with Assist-lib file.grade
+
+
+===================================================================================================
+In order to use Steatho :-  (Must)
+========================
+-- Add the class path dependency to the project level build.gradle file.
+     ----and extend App config class of call intializeSteatho();
+add allprojects {
+        repositories {
+            jcenter()
+            ///
+            ////Steatho
+            here----> maven { url 'https://github.com/uPhyca/stetho-realm/raw/master/maven-repo' }
+            ////
+
+        }
+    }
+====================================================================================================
+ 3-for faceBood Sdk :-
+=====================
+ 1---Add the Maven Central Repository to build.gradle before dependencies:
+ repositories {
+     mavenCentral()
+ }
+
+ 2--Add compile 'com.facebook.android:facebook-android-sdk:[4,5)' to your build.gradle dependencies:
+    dependencies {
+      compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+
+3---import com.facebook.FacebookSdk;                   but it has already imported in this module
+    import com.facebook.appevents.AppEventsLogger;
+
+
+4--Add a new string with the name facebook_app_id containing the value of your Facebook App ID, and a new string for the protocol for Chrome Custom Tabs:
+   <string name="facebook_app_id">983562145119971</string>            this values are exampled
+   <string name="fb_login_protocol_scheme">fb983562145119971</string>
+
+5---<uses-permission android:name="android.permission.INTERNET"/> in android Mainufest
+
+
+6--
+Add a meta-data element, an activity for Facebook, and an activity and intent filter for Chrome Custom Tabs to the application element:
+<application android:label="@string/app_name" ...>;
+    ...
+    <meta-data android:name="com.facebook.sdk.ApplicationId"
+        android:value="@string/facebook_app_id"/>   ----->this id provided from Facebook App Client console
+    ...
+    <activity android:name="com.facebook.FacebookActivity"
+        android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        android:label="@string/app_name" />
+    <activity
+        android:name="com.facebook.CustomTabActivity"
+        android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="@string/fb_login_protocol_scheme" />
+        </intent-filter>
+    </activity>
+</application>
+
+6. Provide the Development and Release Key Hashes for Your App
+    copy the hash key from console and past it in facebook console client
+   this step are exampled here https://developers.facebook.com/docs/facebook-login/android
+====================================================================================================
+For GPSTrakerSingleton===
+=========================
+
+1. add those permetion at you manifest
+    <uses-permission android:name="android.permission.INTERNET" />                  <!-- verify if connected to the internet -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />      <!-- verify if connected to any network -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />      <!-- verify location using GPS, give precise location -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+2. add depandaces in app gradle
+    --->    ///google-Maps
+            compile 'com.google.android.gms:play-services:9.4.0'
+            compile 'com.google.android.gms:play-services-location:9.4.0'
+
+3. get google maps API key and save it in your String.xml as follows
+            ---><string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyA6dRCHll8aVBxo1hZVN2JU2Q1kov0cfaQ</string>
+====================================================================================================
+For PermationController==
+=========================
+
+this class Created to ask for single permation intialize it where ever you wan't
+but you should implement this method and An ------ "Activity" Not 'Fragment' Context-------
+---->how ever you can include it to Fragment but you have to :
+         {
+         you should not use ActivityCompat.requestPermissions when requesting from Fragment instead use the inbuilt method of fragment.
+         inside your desired fragment
+         }
+
+
+Example how to intialize it :
+==================================
+
+First
+        if (Build.VERSION.SDK_INT >= 23) {
+            permationController = new PermationController(getActivity()) {
+                @Override
+                public ExternalPermeation_Cancel_Method setExternalPermeation_Cancel_Method() {
+
+                    return new ExternalPermeation_Cancel_Method() {
+                        @Override
+                        public void ExternalPermeation_Cancel_Method() {
+                            Toast.makeText(getActivity(), "Horaiiiiii", Toast.LENGTH_SHORT).show();
+                            Log.e("FragmentOne", "TraccerHere------------->Horaaaai");
+                        }
+                    };
+                }
+            };
+
+then
+                    // For Asking single permation
+                     Fist parameter is your permeation --2 aram is permation message ---3 is your permeation identifier code
+                     permationController.askSinglePermation(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,"message",101);
+                     /////////////////
+
+
+                     /// For Asking multiple permatio
+                     List<HashMap<String,String>> permations=new ArrayList<HashMap<String, String>>();
+                     HashMap<String,String> permatiosList=new HashMap<String, String>();
+                     permatiosList.put("permeation",android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                     permatiosList.put("permeationCode","100");
+                     permations.add(permatiosList);
+
+                     HashMap<String,String> permatiosList2=new HashMap<String, String>();
+                     permatiosList2.put("permeation",Manifest.permission.READ_CONTACTS);
+                     permatiosList2.put("permeationCode","102");
+                     permations.add(permatiosList2);
+                     permationController.askMuiltyPermeation(permations,"in order to use this we need youur apprval");
+
+                    //////////////////////////
+
+                 } else {
+                     // Pre-Marshmallow
+                 }
+
+
+
+Finally --->
+    But note this method is designed to work under multiple Request
+    you should customized For single Request it should be more simpler
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PermationController.REQUEST_Muilty_PERMISSION && grantResults.length > 0) {
+            for (int i = 0; i < permissions.length; i++) {
+                if (permissions[i].equals(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    SharedPreferences permissionStatus = getSharedPreferences("permissionStatus", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = permissionStatus.edit();
+                    editor.putBoolean(permissions[i], true);
+                    editor.commit();
+                } else if (permissions[i].equals(FragmentOne.REQUEST_PERMISSION_Contact)  && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    SharedPreferences permissionStatus = getSharedPreferences("permissionStatus", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = permissionStatus.edit();
+                    editor.putBoolean(permissions[i], true);
+                    editor.commit();
+                }
+            }
+        }
+
+    }
+
+  ----> Or use  this method  after going to App permeation Activity instead of normal request dialog
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == FragmentOne.REQUEST_PERMISSION_SETTING) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Call back from Sitting Activity", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+

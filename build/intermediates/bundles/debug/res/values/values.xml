@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NetWorkModule</string>
+    <string name="client_email_feedback_subject">client_feed_back</string>
+    <string name="general_gallery_chooser_title">Select Picture:</string>
+    <string name="general_photo_chooser_camera">Camera</string>
+    <string name="general_photo_chooser_gallery">Gallery</string>
+    <string name="general_photo_chooser_title">Upload picture</string>
+    <string name="login_canceled_facebooklogin">FaceBook Login Canceled</string>
+    <string name="login_failed_facebooklogin">FaceBook Login Failed</string>
+    <string name="please_wait_facebooklogin">Please Wait</string>
+    <string name="send_feed_back">Send Feed Back</string>
+</resources>
