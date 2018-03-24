@@ -53,7 +53,6 @@ public class ImageUtils {
 
 
     public void convertImgToBase64(final Context context, final Handler handler, final int width, final int height) {
-        //Glide can't resize for width or height equal to 700 (Hamdy)
         Glide.with(context)
                 .load(mImgPath)
                 .asBitmap()

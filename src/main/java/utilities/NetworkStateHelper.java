@@ -7,7 +7,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
 /**
- * Created by hamdy on 11/21/2016.
+ * Created by ddopik on 11/21/2016.
  */
 public class NetworkStateHelper {
 
