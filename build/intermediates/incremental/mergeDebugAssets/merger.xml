@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/home/abdalla-maged/Desktop/Project_lib/AssestLib-module/src/main/assets"/><source path="/home/abdalla-maged/Desktop/Project_lib/AssestLib-module/build/generated/assets/shaders/debug"/></dataSet><dataSet config="debug"><source path="/home/abdalla-maged/Desktop/Project_lib/AssestLib-module/src/debug/assets"/></dataSet></merger>
