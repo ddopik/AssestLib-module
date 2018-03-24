@@ -9,4 +9,8 @@
     <string name="general_photo_chooser_camera">Camera</string>
     <string name="general_photo_chooser_gallery">Gallery</string>
     <string name="general_photo_chooser_title">Upload picture</string>
+    <string name="map_fragment_open_gps">Please open Gps</string>
+    <string name="map_fragment_yes">Enable Gps</string>
+    <string name="map_fragment_no">No Gps</string>
+    <string name="map_fragment_unspecified_user_location">UnSpecified userLocation</string>
 </resources>

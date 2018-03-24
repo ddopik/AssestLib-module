@@ -15,9 +15,12 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.Toast;
 
+import com.example.networkmodule.R;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -61,7 +64,7 @@ public class MapUtls {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (mLastLocation == null && MapUtls.isLocationPermissionGranted(context)) {
-            buildAlertMessageNoGps((BaseActivity) context); //mha buildAlertMessageNoGps();
+            buildAlertMessageNoGps(context);
         } else {
             //mha moveMapCamera( new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), R.drawable.ic_test,"","",map );
             //VOO moveMapCamera(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()), map);
@@ -89,7 +92,7 @@ public class MapUtls {
                     public void onClick(final DialogInterface dialog,
                                         @SuppressWarnings("unused") final int id) {
                         dialog.cancel();
-                        baseActivity.showToast(baseActivity.getString(R.string.map_fragment_unspecified_user_location));
+                        Log.e("MapUtls","Error--->UnSpecified userLocation");
                     }
                 });
         AlertDialog alert;
