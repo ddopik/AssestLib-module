@@ -24,7 +24,7 @@ import fr.arnaudguyon.xmltojsonlib.XmlToJson;
 import static com.android.volley.VolleyLog.TAG;
 
 /**
- * Created by ddopi on 7/10/2017.
+ * Created by ddopik on 7/10/2017.
  * <p>
  * if you parent need field to be intialized before abstract method in the child being impleented
  * call parent constructur with super(required fiels,required fiels,required fiels);
