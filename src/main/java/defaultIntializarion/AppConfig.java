@@ -2,17 +2,15 @@ package defaultIntializarion;
 
 import android.app.Application;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-
 import android.support.multidex.MultiDex;
-import android.util.Log;
 
 import com.facebook.stetho.Stetho;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import java.io.File;
 
+import defaultIntializarion.realm.RealmConfigFile;
+import defaultIntializarion.realm.RealmDbMigration;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -22,11 +20,12 @@ import io.realm.RealmConfiguration;
  */
 
 
-public class AppConfig extends Application  {
+public class AppConfig extends Application {
 
 
-    public  AppConfig app;
     public static Realm realm;
+    public AppConfig app;
+
 
     @Override
     protected void attachBaseContext(Context context) {
@@ -39,55 +38,27 @@ public class AppConfig extends Application  {
         super.onCreate();
         this.app = this;
         MultiDex.install(app);
-//        intializeRealmInstance(); //intializing Realm Config Instance
+
+//        initRealm();
+//        setRealmDefaultConfiguration();
 //        intializeSteatho();
 //        deleteCache(app);   ///for developing        ##################
-
 //        initializeDepInj(); ///intializing Dagger Dependancy
     }
 
-//
-//    public AppConfig(Context context)
-//    {
-//        this.app=(AppConfig)context;
-//    }
-
-
-
-
-
-
-
-
-    public void intializeRealmInstance() {
-        // Initialize Realm
-        Realm.init(app); // Initialize Realm. Should only be done once when the application starts.
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder().build();
-
-        Realm.deleteRealm(realmConfig); // Delete Realm between app restarts. #################
-
-
-        Realm.setDefaultConfiguration(realmConfig);
-        this.realm = Realm.getDefaultInstance();
-
+    public void initRealm() {
+        Realm.init(this);
     }
 
-    public void intializeSteatho()
-    {
-        Stetho.initialize(
-                Stetho.newInitializerBuilder(this)
-                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
-                        .build());
-
-    }
-
-
+    /**
+     * delete App Cache and NetWork Cache
+     **/
     public static void deleteCache(Context context) {
         try {
             File dir = context.getCacheDir();
             deleteDir(dir);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     public static boolean deleteDir(File dir) {
@@ -100,11 +71,41 @@ public class AppConfig extends Application  {
                 }
             }
             return dir.delete();
-        } else if(dir!= null && dir.isFile()) {
+        } else if (dir != null && dir.isFile()) {
             return dir.delete();
         } else {
             return false;
         }
+    }
+
+    /**
+     * initialize Realm Instance this method called after Realm.init(context)
+     * Note -->this migrate change of tables if Happened
+     *
+     * @param isFirstLaunch true as app first Time launched
+     * @param realmModules  --->realm module graph represent realm objects ex{@link }
+     *                      <p>
+     *                      Now you can return Realm instance through App by Calling ----> Realm.getDefaultInstance()
+     */
+    public static void setRealmDefaultConfiguration(boolean isFirstLaunch, Object realmModules) {
+        if (isFirstLaunch) {
+            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().schemaVersion(RealmConfigFile.REALM_VERSION).migration(new RealmDbMigration()).
+                    modules(realmModules).build();
+            Realm.setDefaultConfiguration(realmConfiguration);
+        }
+    }
+
+
+    /**
+     * Inspect your Realm Tables through Google Browzer
+     */
+    public void intializeSteatho() {
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
+                        .build());
+
     }
 
 
@@ -113,13 +114,6 @@ public class AppConfig extends Application  {
 //            appComponent = DaggerAppComponent.builder()
 //                    .mainAppModule(new MainAppModule(this)).build();
 ////            appComponent.inject(this);  //this App don't Need Any Dependancyes
-//
-//            Stetho.initialize(
-//                    Stetho.newInitializerBuilder(this)
-//                            .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-//                            .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
-//                            .build());
-//
 //        }
 //    }
 

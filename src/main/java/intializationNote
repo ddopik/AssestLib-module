@@ -11,9 +11,11 @@ First of all (add/Check) those lines existence
       ---then define it  in your manifest inside <Application name="yourAppName">
 
 ==========================================================================================
+           //--->All those Dependaces are in App Gradle not AssestLib Gradle <---\\
+
+
  Realm instance :-  (Musts)
 ================================
-
 Step 1:
         Add the class path dependency to the project level build.gradle file.dependencies
         buildscript {
@@ -42,7 +44,7 @@ allprojects {
         ...
 }}
 ====================================================================================================
-2-for butterknif :-   (Must)
+2-for butterknif :- (Optional)
 =========================
  ----->   this added to add inside project gradle
           dependencies {

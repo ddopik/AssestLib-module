@@ -65,8 +65,7 @@ public class Utilities {
     }
 
 
-
-    public static  void sendEmail(String email, Context activity) {
+    public static void sendEmail(String email, Context activity) {
         Resources resources = activity.getResources();
 
         Intent emailIntent = new Intent();
@@ -92,9 +91,9 @@ public class Utilities {
             // Extract the label, append it, and repackage it in a LabeledIntent
             ResolveInfo ri = resInfo.get(i);
             String packageName = ri.activityInfo.packageName;
-            if(packageName.contains("android.gm")) {
+            if (packageName.contains("android.gm")) {
                 emailIntent.setPackage(packageName);
-            }  else if(packageName.contains("android.email")) {
+            } else if (packageName.contains("android.email")) {
                 emailIntent.setPackage(packageName);
             }
 // else if(packageName.contains("twitter") || packageName.contains("facebook") || packageName.contains("mms") || packageName.contains("android.gm")) {
@@ -105,9 +104,9 @@ public class Utilities {
 //                if(packageName.contains("twitter")) {
 //                    intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.share_twitter));
 //                } else if(packageName.contains("facebook")) {
-                    // Warning: Facebook IGNORES our text. They say "These fields are intended for users to express themselves. Pre-filling these fields erodes the authenticity of the user voice."
-                    // One workaround is to use the Facebook SDK to post, but that doesn't allow the user to choose how they want to share. We can also make a custom landing page, and the link
-                    // will show the <meta content ="..."> text from that page with our link in Facebook.
+            // Warning: Facebook IGNORES our text. They say "These fields are intended for users to express themselves. Pre-filling these fields erodes the authenticity of the user voice."
+            // One workaround is to use the Facebook SDK to post, but that doesn't allow the user to choose how they want to share. We can also make a custom landing page, and the link
+            // will show the <meta content ="..."> text from that page with our link in Facebook.
 //                    intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.share_facebook));
 //                } else if(packageName.contains("mms")) {
 //                    intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.share_sms));
@@ -122,7 +121,7 @@ public class Utilities {
         }
 
         // convert intentList to array
-        LabeledIntent[] extraIntents = intentList.toArray( new LabeledIntent[ intentList.size() ]);
+        LabeledIntent[] extraIntents = intentList.toArray(new LabeledIntent[intentList.size()]);
 
         openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
         activity.startActivity(openInChooser);
@@ -152,7 +151,9 @@ public class Utilities {
         password.setSelection(password.getText().length());
     }
 
-    //Convert arabic number to english number "," NOT added here
+    /**
+     * Convert arabic number to english number "," NOT added here
+     */
     private static final String arabic = "\u06f0\u06f1\u06f2\u06f3\u06f4\u06f5\u06f6\u06f7\u06f8\u06f9";
 
     public static String arabicToDecimal(String number) {
@@ -168,7 +169,9 @@ public class Utilities {
         return new String(chars);
     }
 
-    //Convert arabic number to english number "," added here
+    /**
+     * /Convert arabic number to english number "," added here
+     */
     public static String getUSNumber(String Numtoconvert) {
 
         NumberFormat formatter = NumberFormat.getInstance(Locale.US);
@@ -179,9 +182,21 @@ public class Utilities {
                 Numtoconvert = formatter.parse(Numtoconvert).toString();
         } catch (ParseException e) {
             // TODO Auto-generated catch block
-            Log.e("Utilities","Could not convert Arabic number"+e.getMessage());
+            Log.e("Utilities", "Could not convert Arabic number" + e.getMessage());
         }
         return Numtoconvert;
     }
+
+
+    /**
+     * getting instance of the giving String
+     * Note that you need to provide the fully qualified name of the class for the class loader to find it.
+     * I.e., if 'class' is actually in some package, you need to do forName("your.package.A") for it to work.
+     */
+    public Class<?> getClassInstance(String className) throws ClassNotFoundException {
+
+        return Class.forName(className);
+    }
+
 
 }
