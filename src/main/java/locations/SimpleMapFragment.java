@@ -16,8 +16,6 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.Marker;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 
 /**
@@ -31,11 +29,10 @@ public class SimpleMapFragment extends Fragment  {
     private GPSTrackerٍSingleton gpsTracker;
 //    private WeatherModel weatherModel=new WeatherModel();
 //    private ArrayList<CityWeather_Item> cityWeather_items;
-private Unbinder unbinder;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.map_fragment, container, false);
-        unbinder= ButterKnife.bind(this,rootView);
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume(); // needed to get the map to display immediately
@@ -134,7 +131,6 @@ private Unbinder unbinder;
     public void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
-        unbinder.unbind();
     }
 
     @Override

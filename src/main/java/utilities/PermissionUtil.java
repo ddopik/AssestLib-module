@@ -3,25 +3,38 @@ package com.spade.nap.utils;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
+import android.widget.Toast;
 
-import com.spade.nap.utils.PrefUtils;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import utilities.PrefUtils;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
  * Created by abdalla-maged on 3/6/18.
  */
-public class PermissionUtil {
+public abstract class PermissionUtil {
 
 
 
     public static final int REQUEST_PERMISSION_SETTING = 101;
     public static final int REQUEST_Muilty_PERMISSION = 111;
+    private static boolean firstTimeAsknigPermeation = true;
     private SharedPreferences permissionStatus;
     private Activity activityContext;
-    private static boolean firstTimeAsknigPermeation = true;
     private boolean sentToSettings = false;
 
 
@@ -72,42 +85,6 @@ public class PermissionUtil {
         }
         return false;
     }
-    /*
-        * Callback on various cases on checking permission
-        *
-        * 1.  Below M, runtime permission not needed. In that case onPermissionGranted() would be called.
-        *     If permission is already granted, onPermissionGranted() would be called.
-        *
-        * 2.  Above M, if the permission is being asked first time onPermissionAsk() would be called.
-        *
-        * 3.  Above M, if the permission is previously asked but not granted, onPermissionPreviouslyDenied()
-        *     would be called.
-        *
-        * 4.  Above M, if the permission is disabled by device policy or the user checked "Never ask again"
-        *     check box on previous request permission, onPermissionDisabled() would be called.
-        * */
-    public interface PermissionAskListener {
-        /*
-                * Callback to ask permission
-                * */
-        void onPermissionAsk();
-        /*
-                * Callback on permission denied
-                * */
-        void onPermissionPreviouslyDenied();
-        /*
-                * Callback on permission "Never show again" checked and denied
-                * */
-        void onPermissionDisabled();
-        /*
-                * Callback on permission granted
-                * */
-        void onPermissionGranted();
-    }
-
-
-
-
 
     public void askSinglePermeation(final String permeation,String message,final int EXTERNAL_STORAGE_PERMISSION_CONSTANT) {
 
@@ -179,7 +156,7 @@ public class PermissionUtil {
 
     }
 
-    public void askMuiltyPermeation(List<HashMap<String, String>> permeation,String message) {
+    public void askMuiltyPermeation(List<HashMap<String, String>> permeation, String message) {
 
         List<String> grantedPermeation = new ArrayList<String>();
         List<String> neverAskAgainDeniedPermeation = new ArrayList<String>();
@@ -251,7 +228,6 @@ public class PermissionUtil {
         builder.show();
     }
 
-
     private void runPermeationThroughSitting(String[] permation, final String message, final int permeationCode) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activityContext);
@@ -280,8 +256,44 @@ public class PermissionUtil {
         builder.show();
     }
 
-
     public abstract ExternalPermeation_Cancel_Method setExternalPermeation_Cancel_Method();
+
+
+    /*
+        * Callback on various cases on checking permission
+        *
+        * 1.  Below M, runtime permission not needed. In that case onPermissionGranted() would be called.
+        *     If permission is already granted, onPermissionGranted() would be called.
+        *
+        * 2.  Above M, if the permission is being asked first time onPermissionAsk() would be called.
+        *
+        * 3.  Above M, if the permission is previously asked but not granted, onPermissionPreviouslyDenied()
+        *     would be called.
+        *
+        * 4.  Above M, if the permission is disabled by device policy or the user checked "Never ask again"
+        *     check box on previous request permission, onPermissionDisabled() would be called.
+        * */
+    public interface PermissionAskListener {
+        /*
+                * Callback to ask permission
+                * */
+        void onPermissionAsk();
+
+        /*
+                * Callback on permission denied
+                * */
+        void onPermissionPreviouslyDenied();
+
+        /*
+                * Callback on permission "Never show again" checked and denied
+                * */
+        void onPermissionDisabled();
+
+        /*
+                * Callback on permission granted
+                * */
+        void onPermissionGranted();
+    }
 
 
     public interface ExternalPermeation_Cancel_Method {

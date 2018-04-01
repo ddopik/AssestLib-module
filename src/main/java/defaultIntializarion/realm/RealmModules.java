@@ -10,6 +10,6 @@ import io.realm.annotations.RealmModule;
 /**
  * this graph should define all your Realm Moduls
  * */
-@RealmModule(classes = {/*RealmModule.class*/})
+//@RealmModule(classes = {/*RealmModule.class*/})
 public class RealmModules {
 }

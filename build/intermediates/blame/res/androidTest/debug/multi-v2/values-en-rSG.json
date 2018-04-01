@@ -4,13 +4,13 @@
             "outputFile": "/home/abdalla-maged/Desktop/OPenGLApp/AssestLib-module/build/intermediates/incremental/mergeDebugAndroidTestResources/merged.dir/values-en-rSG/values-en-rSG.xml",
             "map": [
                 {
-                    "source": "/home/abdalla-maged/.gradle/caches/transforms-1/files-1.1/play-services-wallet-9.4.0.aar/7e66fe8ed3a6f86bd00a89b873a5ef70/res/values-en-rSG/values.xml",
+                    "source": "/home/abdalla-maged/.gradle/caches/transforms-1/files-1.1/play-services-wallet-12.0.1.aar/973e8316387b8a832f14c65de8ba2ab1/res/values-en-rSG/values.xml",
                     "from": {
                         "startLines": "4",
-                        "startColumns": "4",
-                        "startOffsets": "292",
-                        "endColumns": "103",
-                        "endOffsets": "391"
+                        "startColumns": "0",
+                        "startOffsets": "206",
+                        "endColumns": "99",
+                        "endOffsets": "305"
                     },
                     "to": {
                         "startLines": "2",

@@ -29,6 +29,11 @@ import java.util.Locale;
 public class Utilities {
 
     /**
+     * Convert arabic number to english number "," NOT added here
+     */
+    private static final String arabic = "\u06f0\u06f1\u06f2\u06f3\u06f4\u06f5\u06f6\u06f7\u06f8\u06f9";
+
+    /**
      * Converts density independent pixels to pixels.
      *
      * @param dp Dp to convert.
@@ -64,6 +69,18 @@ public class Utilities {
         return macAddress;
     }
 
+
+//
+//    public static void sendEmail(String email, BaseActivity activity) {
+//        Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+//        emailIntent.setType("message/rfc822");
+//        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{email});
+//        try {
+//            activity.startActivity(Intent.createChooser(emailIntent, activity.getString(R.string.contact_us_email_client_chooser_title)));
+//        } catch (android.content.ActivityNotFoundException ex) {
+//            activity.showToast(activity.getString(R.string.contact_us_error_no_email_client));
+//        }
+//    }
 
     public static void sendEmail(String email, Context activity) {
         Resources resources = activity.getResources();
@@ -127,19 +144,6 @@ public class Utilities {
         activity.startActivity(openInChooser);
     }
 
-
-//
-//    public static void sendEmail(String email, BaseActivity activity) {
-//        Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-//        emailIntent.setType("message/rfc822");
-//        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{email});
-//        try {
-//            activity.startActivity(Intent.createChooser(emailIntent, activity.getString(R.string.contact_us_email_client_chooser_title)));
-//        } catch (android.content.ActivityNotFoundException ex) {
-//            activity.showToast(activity.getString(R.string.contact_us_error_no_email_client));
-//        }
-//    }
-
     public static void showHidePassword(EditText password, View showIcon, View hideIcon, boolean shouldShowPassword) {
         showIcon.setVisibility(View.VISIBLE);
         hideIcon.setVisibility(View.INVISIBLE);
@@ -150,11 +154,6 @@ public class Utilities {
 
         password.setSelection(password.getText().length());
     }
-
-    /**
-     * Convert arabic number to english number "," NOT added here
-     */
-    private static final String arabic = "\u06f0\u06f1\u06f2\u06f3\u06f4\u06f5\u06f6\u06f7\u06f8\u06f9";
 
     public static String arabicToDecimal(String number) {
         char[] chars = new char[number.length()];
@@ -193,7 +192,7 @@ public class Utilities {
      * Note that you need to provide the fully qualified name of the class for the class loader to find it.
      * I.e., if 'class' is actually in some package, you need to do forName("your.package.A") for it to work.
      */
-    public Class<?> getClassInstance(String className) throws ClassNotFoundException {
+    public static Class<?> getClassInstance(String className) throws ClassNotFoundException {
 
         return Class.forName(className);
     }
