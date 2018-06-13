@@ -62,8 +62,8 @@ public abstract class FaceBookLoginFragment extends android.support.v4.app.Fragm
         mainView = inflater.inflate(R.layout.facebook_login_fragment, container, false);
 
 
-        facebook_button = (LoginButton) mainView.findViewById(R.id.connectWithFbButton);
-        facebook_button.setFragment(this); /// Requried for onSuccess callBack
+        facebook_button =  mainView.findViewById(R.id.connectWithFbButton);
+        facebook_button.setFragment(this); /// Reburied for onSuccess callBack
         progress = new ProgressDialog(getActivity());
         progress.setMessage(getActivity().getString(R.string.please_wait_facebooklogin));
         progress.setIndeterminate(false);
@@ -81,7 +81,7 @@ public abstract class FaceBookLoginFragment extends android.support.v4.app.Fragm
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        Log.v("LoginActivity", response.toString());
+                        Log.i("LoginActivity", response.toString());
                         try {
                             Log.e("json is ", object.toString());
                             Log.e("response is ", response.toString());
@@ -92,13 +92,11 @@ public abstract class FaceBookLoginFragment extends android.support.v4.app.Fragm
                             gender = object.getString("gender");
                             String profile_name = object.getString("name");
                             long fb_id = object.getLong("id"); //use this for logout
-//                                    Start new activity or use this info in your project.
-
+//                           Start new activity or use this info in your project.
 
                             SharedPreferences.Editor editor = getActivity().getSharedPreferences("task_shared_pref", MODE_PRIVATE).edit();
                             editor.putLong("fb_id", fb_id);
                             editor.apply();
-
 
                             Intent i = new Intent(getActivity(), getHomeActivityName());
                             i.putExtra("type", "facebook");
@@ -115,7 +113,7 @@ public abstract class FaceBookLoginFragment extends android.support.v4.app.Fragm
                             getActivity().finish();
 
                         } catch (Exception e) {
-                            Log.e("FaceBookLoginFragment", "1---error --->" + e.getMessage());
+                            Log.e("FaceBookLoginFragment", "Error --->" + e.getMessage());
                             progress.dismiss();
                         }
 
@@ -138,7 +136,7 @@ public abstract class FaceBookLoginFragment extends android.support.v4.app.Fragm
             @Override
             public void onError(FacebookException error) {
                 Toast.makeText(getActivity(), getResources().getString(R.string.login_failed_facebooklogin), Toast.LENGTH_SHORT).show();
-                Log.e("FaceBookLoginFragment", "2--error ---->" + error.getMessage());
+                Log.e("FaceBookLoginFragment", "Error ---->" + error.getMessage());
                 progress.dismiss();
             }
         });

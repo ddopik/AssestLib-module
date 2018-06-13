@@ -1,11 +1,17 @@
 package network.fastAndroidNetwork;
 
+import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.rx2androidnetworking.Rx2AndroidNetworking;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
 
 import io.reactivex.Observable;
 import network.volly.response_module.BaseResponse;
@@ -18,10 +24,15 @@ public class BaseNetWorkApi {
 
     private static final String BASE_URL = "http://dev.spade.studio/mek-apis/public/api/v1/{lang}";
     private static final String REQUEST_URL = BASE_URL + "/causes";
-    private static final String PAGE_NUMBER = "page";
+
+    /**
+     * addPathParameter("Segment","value")  ---> Replace Segment of Url with my specified key
+     * addQueryParameter("Segment","value")  --->add value with specified segment name to Url
+     * addBodyParameter("key","value")       --->(Post) set Post Body wih specifiend parameter
+     */
 
 
-    public static io.reactivex.Observable<BaseResponse> makeGetquestRequest(String lang, String key) {
+    public static io.reactivex.Observable<BaseResponse> makeGetRequest(String lang, String key) {
         return Rx2AndroidNetworking.get(REQUEST_URL)
                 .addPathParameter("lang", lang)
                 .addQueryParameter("key", String.valueOf(key))
@@ -30,7 +41,7 @@ public class BaseNetWorkApi {
                 .getObjectObservable(BaseResponse.class);
     }
 
-    public static Observable<Example> makeGetquestRequestTemp(String lang, String url) {
+    public static Observable<Example> makeGetRequestTemp(String lang, String url) {
         return Rx2AndroidNetworking.get(url)
                 .getResponseOnlyFromNetwork()
                 .build()
@@ -41,40 +52,46 @@ public class BaseNetWorkApi {
         return Rx2AndroidNetworking.post(REQUEST_URL)
                 .addJSONObjectBody(jsonObject)
                 .setPriority(Priority.HIGH)
-                .getResponseOnlyFromNetwork()
                 .build()
                 .getObjectObservable(BaseResponse.class);
     }
 
-//    public static void complaint(String message, File file, SendMessageCallBacks sendMessageCallBacks) {
-//        AndroidNetworking.upload(REQUEST_URL)
-//                .addHeaders("Content-Type", "multipart/form-data")
-//                .addMultipartParameter("message", message)
-//                .addMultipartFile("files[]", file) //todo "files[]" is A key According to back End
-//                .setPriority(Priority.HIGH)
-//                .build()
-//                .getAsJSONObject(new JSONObjectRequestListener() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        try {
-//                            boolean success = response.getBoolean("success");
-//                            if (success) {
-//                                sendMessageCallBacks.onMessageSent();
-//                            } else {
-//                                sendMessageCallBacks.onMessageSentFailed();
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                            sendMessageCallBacks.onMessageSentFailed();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onError(ANError anError) {
-//                        sendMessageCallBacks.onMessageSentFailed();
-//                    }
-//                });
-//    }
+
+    /**
+     * --Upload Attachment
+     *
+     * @param file -->File src
+     * @message -->Request parameter you can add multible parameter to request  body along with uploaded attachment
+     */
+    public static void complaint(String message, File file, final RequestCallBack requestCallBack) {
+        AndroidNetworking.upload(REQUEST_URL)
+                .addHeaders("Content-Type", "multipart/form-data")
+                .addMultipartParameter("message", message)
+                .addMultipartFile("files[]", file) //todo "files[]" is A key According to back End
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            boolean success = response.getBoolean("success");
+                            if (success) {
+                                requestCallBack.OnSuccsess();
+                            } else {
+                                requestCallBack.onFailer();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            requestCallBack.onFailer();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        requestCallBack.onFailer();
+                    }
+                });
+    }
 
     public class Example {
 

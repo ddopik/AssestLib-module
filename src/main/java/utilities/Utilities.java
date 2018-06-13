@@ -1,10 +1,13 @@
 package utilities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.wifi.WifiManager;
 import android.text.InputType;
@@ -197,5 +200,36 @@ public class Utilities {
         return Class.forName(className);
     }
 
+    public static void changeAppLanguage(Context context, String localType) {
+        Locale locale = new Locale(localType);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        context.getApplicationContext().getResources().updateConfiguration(config, null);
+
+
+    }
+
+    public static void restartContext(Context context) {
+        Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        context.startActivity(intent);
+    }
+
+    /**
+     * force entire app to be restarted  App is Destroyed ->rebuild
+     *
+     * @param context  -->launcher context
+     * @param genClass -->Landing Activity
+     */
+    public void restartApp(Context context, Class<?> genClass) {
+        Intent mStartActivity = new Intent(context, genClass);
+        int mPendingIntentId = 123456;
+        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId, mStartActivity,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+        System.exit(0);
+    }
 
 }

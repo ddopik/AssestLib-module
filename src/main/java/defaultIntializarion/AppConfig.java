@@ -1,18 +1,24 @@
 package defaultIntializarion;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 
+import com.androidnetworking.AndroidNetworking;
 import com.facebook.stetho.Stetho;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import java.io.File;
+import java.util.LinkedList;
 
 import defaultIntializarion.realm.RealmConfigFile;
 import defaultIntializarion.realm.RealmDbMigration;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import network.BasicAuthInterceptor;
+import okhttp3.OkHttpClient;
 
 
 /**
@@ -24,14 +30,12 @@ public class AppConfig extends Application {
 
 
     public static Realm realm;
-    public AppConfig app;
+    public static AppConfig app;
 
-
-    @Override
-    protected void attachBaseContext(Context context) {
-        super.attachBaseContext(context);
-        MultiDex.install(this);
+    private AppConfig() {
+        throw new UnsupportedOperationException("can't instantiate AppConfig...");
     }
+
 
     @Override
     public void onCreate() {
@@ -39,15 +43,28 @@ public class AppConfig extends Application {
         this.app = this;
         MultiDex.install(app);
 
-//        initRealm();
-//        setRealmDefaultConfiguration();
+//        initRealm(); //--> [1]order is must
+//        setRealmDefaultConfiguration(); //--> [2]order is must
 //        intializeSteatho();
 //        deleteCache(app);   ///for developing        ##################
 //        initializeDepInj(); ///intializing Dagger Dependancy
     }
 
-    public void initRealm() {
-        Realm.init(this);
+    /**
+     * use this method in case initializing object by --new ()-- keyword
+     *
+     * @param app app Context
+     */
+    public static void init(@NonNull final Application app) {
+        AppConfig.app = (AppConfig) app;
+    }
+
+
+    public static AppConfig getApp() {
+        if (app != null) {
+            return app;
+        }
+        throw new NullPointerException("u should init AppContext  first");
     }
 
     /**
@@ -95,6 +112,17 @@ public class AppConfig extends Application {
         }
     }
 
+    @Override
+    protected void attachBaseContext(Context context) {
+        super.attachBaseContext(context);
+        MultiDex.install(this);
+    }
+
+
+    public void initRealm() {
+        Realm.init(this);
+    }
+
 
     /**
      * Inspect your Realm Tables through Google Browzer
@@ -116,5 +144,25 @@ public class AppConfig extends Application {
 ////            appComponent.inject(this);  //this App don't Need Any Dependancyes
 //        }
 //    }
+
+
+    private void initFastAndroidNetworking() {
+
+/**
+ * initializing block to add authentication to your Header Request
+ * **/
+        BasicAuthInterceptor basicAuthInterceptor = new BasicAuthInterceptor(getApplicationContext());
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .addNetworkInterceptor(basicAuthInterceptor)
+                .build();
+        AndroidNetworking.initialize(this, okHttpClient);
+///////////////////////
+        /**
+         * default initialization
+         * */
+//        AndroidNetworking.initialize(this);
+//
+    }
+
 
 }

@@ -5,9 +5,9 @@ package bases;
  */
 
 /**
- * this interface should have common method that all Presenter interface should have
+ * this Class  should have common method that all Presenter interface should have
  **/
-public interface BasePresenter<T extends BaseView> {
+public abstract class BasePresenter<T extends BaseView> {
 
-    void setView(T view);
+   abstract void setView(T view);
 }
