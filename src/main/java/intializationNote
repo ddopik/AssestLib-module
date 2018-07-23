@@ -9,7 +9,6 @@ First of all (add/Check) those lines existence
 //---> setting.gradle    include ':app',':AssetLib-module'
 //---> you must  Create App Class that  extent AppConfig class from defaultIntializarion-->package.
       ---then define it  in your manifest inside <Application name="yourAppName">
-
 //----> you must add  multiDexEnabled true then override OnCreate of AppConfig Class
 
 
