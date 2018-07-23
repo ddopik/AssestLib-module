@@ -10,11 +10,14 @@ First of all (add/Check) those lines existence
 //---> you must  Create App Class that  extent AppConfig class from defaultIntializarion-->package.
       ---then define it  in your manifest inside <Application name="yourAppName">
 
+//----> you must add  multiDexEnabled true then override OnCreate of AppConfig Class
+
+
 ==========================================================================================
            //--->All those Dependaces are in App Gradle not AssestLib Gradle <---\\
 
 
- Realm instance :-  (Musts)
+ Realm instance :-  (Must)
 ================================
 Step 1:
         Add the class path dependency to the project level build.gradle file.dependencies
@@ -33,7 +36,7 @@ Step 2:   Then Apply the realm-android plugin to the top of the application leve
            apply plugin: 'realm-android'
 
 ==============================================================================
-XML to jason lib :-  (Must)
+XML to jason lib :-  (Optional)
 ============
 allprojects {
     repositories {
@@ -232,3 +235,37 @@ Finally --->
         }
     }
 
+======================================================================
+ Include Array of in ext{}  at the End of (project Gradle) file=  An==
+=======================================================================
+this defines An constant for all android dependany in app.gradle file.
+As :
+ext {
+
+    // App dependencies
+    supportLibraryVersion = '27.0.1'
+    playServices = '11.8.0'
+    firebase = '11.8.0'
+    kotlin_version = '1.2.51'
+}
+
+and in you app.grade file call this variable with .ext.name_of_variable
+
+ =================================================================
+ Include this at the End of (project Gradle) file=
+ ==================================================
+ //In this way the clean task (with the type=delete) deletes the build directory when it runs.
+ //It is useful when you modify some config files like the settings.gradle which can requires a complete clean.
+ task clean(type: Delete) {
+     delete rootProject.buildDir
+ }
+
+ ==========================================================================
+ At app.gradle include this line as
+=======================================
+   resValue "string", "google_maps_key", (project.findProperty("GOOGLE_MAPS_API_KEY") ?: "")
+
+   GOOGLE_MAPS_API_KEY --> it's value will be at gradle.properties file
+
+   --->now you can accese this value wide through you Application with (___R.string.google_maps_key_______)
+ ==========================================================================

@@ -32,9 +32,6 @@ public class AppConfig extends Application {
     public static Realm realm;
     public static AppConfig app;
 
-    private AppConfig() {
-        throw new UnsupportedOperationException("can't instantiate AppConfig...");
-    }
 
 
     @Override
