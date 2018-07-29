@@ -13,6 +13,8 @@ public abstract class PrefUtils {
     public static final String ARABIC_LANG = "ar";
     public static final String ENGLISH_LANG = "en";
     public static final String GUEST_USER_ID = "-1";
+
+
     private static final String LOGIN_PROVIDER = "LOGIN_PROVIDER";
     private static final String USER_ID = "USER_ID";
     private static final String USER_TOKEN = "USER_TOKEN";
@@ -21,10 +23,10 @@ public abstract class PrefUtils {
     private static final String IS_LANGUAGE_SELECTED = "IS_LANGUAGE_SELECTED";
     private static final String IS_TOKEN_SAVED = "IS_TOKEN_SAVED";
     private static final String APP_LANG = "APP_LANG";
-    private static String PREF_FILE_NAME;
+    public static String PREF_FILE_NAME;
 
-    public PrefUtils() {
-        PREF_FILE_NAME = getProjectName();
+    public PrefUtils(String PREF_FILE_NAME) {
+        this.PREF_FILE_NAME = PREF_FILE_NAME;
     }
 
     private static SharedPreferences getSharedPref(Context context) {
@@ -96,9 +98,13 @@ public abstract class PrefUtils {
         return context.getSharedPreferences(PREF_FILE_NAME, MODE_PRIVATE).getBoolean(permission, true);
     }
 
-    public String getProjectName() {
-        return PREF_FILE_NAME;
+    public static Boolean isLoginProvider(Context context) {
+        return getSharedPref(context).getBoolean(LOGIN_PROVIDER, false);
     }
 
-    public abstract void setPrefFileName(String projectName);
+    public static void setLoginState(Context context, Boolean state) {
+        SharedPreferences sharedPreference = context.getSharedPreferences(PREF_FILE_NAME, MODE_PRIVATE);
+        sharedPreference.edit().putBoolean(LOGIN_PROVIDER, state).apply();
+    }
+
 }
