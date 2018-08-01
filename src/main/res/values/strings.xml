@@ -13,4 +13,6 @@
     <string name="map_fragment_yes">Enable Gps</string>
     <string name="map_fragment_no">No Gps</string>
     <string name="map_fragment_unspecified_user_location">UnSpecified userLocation</string>
+    <string name="facebook_signup">Sign up with Facebook</string>
+    <string name="twitter_signup">Sign up with Twitter</string>
 </resources>

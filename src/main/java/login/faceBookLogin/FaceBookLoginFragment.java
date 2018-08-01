@@ -11,12 +11,14 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.networkmodule.R;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.LoggingBehavior;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
@@ -29,7 +31,7 @@ import java.util.Arrays;
 import static android.content.Context.MODE_PRIVATE;
 
 /**
- * Created by ddopi on 7/12/2017.
+ * Created by ddopik on 7/12/2017.
  */
 
 public abstract class FaceBookLoginFragment extends android.support.v4.app.Fragment {
@@ -59,10 +61,8 @@ public abstract class FaceBookLoginFragment extends android.support.v4.app.Fragm
         callbackManager = CallbackManager.Factory.create();
         AppEventsLogger.activateApp(getActivity());
 
-        mainView = inflater.inflate(R.layout.facebook_login_fragment, container, false);
-
-
-        facebook_button =  mainView.findViewById(R.id.connectWithFbButton);
+        mainView = inflater.inflate((getFacceBookButtomWidgetLayout() != 0) ? getFacceBookButtomWidgetLayout() : R.layout.facebook_login_fragment, container, false);
+        facebook_button = mainView.findViewById((getFaceBookButtonId() != 0) ? getFaceBookButtonId() : R.id.connectWithFbButton);
         facebook_button.setFragment(this); /// Reburied for onSuccess callBack
         progress = new ProgressDialog(getActivity());
         progress.setMessage(getActivity().getString(R.string.please_wait_facebooklogin));
@@ -81,6 +81,7 @@ public abstract class FaceBookLoginFragment extends android.support.v4.app.Fragm
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
+
                         Log.i("LoginActivity", response.toString());
                         try {
                             Log.e("json is ", object.toString());
@@ -98,19 +99,19 @@ public abstract class FaceBookLoginFragment extends android.support.v4.app.Fragm
                             editor.putLong("fb_id", fb_id);
                             editor.apply();
 
-                            Intent i = new Intent(getActivity(), getHomeActivityName());
-                            i.putExtra("type", "facebook");
-                            i.putExtra("facebook_id", facebook_id);
-                            i.putExtra("f_name", f_name);
-                            i.putExtra("m_name", m_name);
-                            i.putExtra("l_name", l_name);
-                            i.putExtra("full_name", full_name);
-                            i.putExtra("profile_image", profile_image);
-                            i.putExtra("email_id", email_id);
-                            i.putExtra("gender", gender);
+                            Intent intent = new Intent(getActivity(), getHomeActivityName());
+                            intent.putExtra("type", "facebook");
+                            intent.putExtra("facebook_id", facebook_id);
+                            intent.putExtra("facebook_access_token", getAccessToken());
+                            intent.putExtra("f_name", f_name);
+                            intent.putExtra("m_name", m_name);
+                            intent.putExtra("l_name", l_name);
+                            intent.putExtra("full_name", full_name);
+                            intent.putExtra("profile_image", profile_image);
+                            intent.putExtra("email_id", email_id);
+                            intent.putExtra("gender", gender);
                             progress.dismiss();
-                            startActivity(i);
-                            getActivity().finish();
+                            OnFaceBookResponseComplete(object, intent);
 
                         } catch (Exception e) {
                             Log.e("FaceBookLoginFragment", "Error --->" + e.getMessage());
@@ -129,12 +130,14 @@ public abstract class FaceBookLoginFragment extends android.support.v4.app.Fragm
 
             @Override
             public void onCancel() {
+                OnFaceBookResponseCanceled();
                 Toast.makeText(getActivity(), getResources().getString(R.string.login_canceled_facebooklogin), Toast.LENGTH_SHORT).show();
                 progress.dismiss();
             }
 
             @Override
             public void onError(FacebookException error) {
+                OnFaceBookResponseError(error);
                 Toast.makeText(getActivity(), getResources().getString(R.string.login_failed_facebooklogin), Toast.LENGTH_SHORT).show();
                 Log.e("FaceBookLoginFragment", "Error ---->" + error.getMessage());
                 progress.dismiss();
@@ -156,7 +159,24 @@ public abstract class FaceBookLoginFragment extends android.support.v4.app.Fragm
     }
 
 
+    private String getAccessToken() {
+        FacebookSdk.setIsDebugEnabled(true);
+        FacebookSdk.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
+        AccessToken token = AccessToken.getCurrentAccessToken();
+        return String.valueOf(token.getToken());
+    }
+
     public abstract Class getHomeActivityName();
+
+    public abstract void OnFaceBookResponseComplete(JSONObject object, Intent intent);
+
+    public abstract void OnFaceBookResponseError(FacebookException error);
+
+    public abstract void OnFaceBookResponseCanceled();
+
+    public abstract int getFacceBookButtomWidgetLayout();
+
+    public abstract int getFaceBookButtonId();
 
     @Override
     public void onDestroyView() {

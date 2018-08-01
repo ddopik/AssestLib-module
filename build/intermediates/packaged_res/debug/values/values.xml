@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="blue3E549C">#3E549C</color>
+    <color name="white">#FFFFFF</color>
     <dimen name="map_location_marker_icon_height">500dp</dimen>
     <dimen name="map_location_marker_icon_width">500dp</dimen>
     <string name="app_name">NetWorkModule</string>
     <string name="client_email_feedback_subject">client_feed_back</string>
+    <string name="facebook_signup">Sign up with Facebook</string>
     <string name="general_gallery_chooser_title">Select Picture:</string>
     <string name="general_photo_chooser_camera">Camera</string>
     <string name="general_photo_chooser_gallery">Gallery</string>
@@ -16,4 +19,5 @@
     <string name="map_fragment_yes">Enable Gps</string>
     <string name="please_wait_facebooklogin">Please Wait</string>
     <string name="send_feed_back">Send Feed Back</string>
+    <string name="twitter_signup">Sign up with Twitter</string>
 </resources>
