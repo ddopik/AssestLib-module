@@ -1,9 +1,10 @@
 package bases;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 
 /**
  * Created by abdalla-maged on 3/27/18.
@@ -11,7 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 
 public  abstract  class BaseActivity extends AppCompatActivity {
 
-    protected abstract void addFragment(Fragment fragment,String title,String tag);
+    protected abstract void addFragment(Fragment fragment, String title, String tag);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

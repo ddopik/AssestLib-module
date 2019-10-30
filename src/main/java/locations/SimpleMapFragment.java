@@ -1,14 +1,15 @@
 package locations;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
  ;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import com.example.networkmodule.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -22,11 +23,11 @@ import com.google.android.gms.maps.model.Marker;
  * Created by ddopi on 7/14/2017.
  */
 
-public class SimpleMapFragment extends Fragment  {
+public class SimpleMapFragment extends Fragment {
 
     MapView mMapView;
     private GoogleMap googleMap;
-    private GPSTrackerٍSingleton gpsTracker;
+    private GPSTrackerSingleton gpsTracker;
 //    private WeatherModel weatherModel=new WeatherModel();
 //    private ArrayList<CityWeather_Item> cityWeather_items;
 
@@ -64,7 +65,7 @@ public class SimpleMapFragment extends Fragment  {
 //                    googleMap.addMarker(new MarkerOptions().position(city_cordination).title(item.getCityName()).snippet(item.getTemp()+"C")).setTag(item);
 //                }
 
-                gpsTracker=new GPSTrackerٍSingleton(getActivity()){
+                gpsTracker=new GPSTrackerSingleton(getActivity()){
                     @Override
                     public Fragment getFragmentContext() {
                         return SimpleMapFragment.this;

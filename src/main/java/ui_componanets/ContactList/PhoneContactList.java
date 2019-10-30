@@ -25,6 +25,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 
+import androidx.fragment.app.Fragment;
 import com.example.networkmodule.R;
 
 import java.io.IOException;
@@ -35,7 +36,7 @@ import ui_componanets.ContactList.adapter.UserContactAdapter;
 import ui_componanets.ContactList.viewHolder.UserViewHolder;
 
 
-public class PhoneContactList extends  android.support.v4.app.Fragment  {
+public class PhoneContactList extends Fragment {
 
 
 

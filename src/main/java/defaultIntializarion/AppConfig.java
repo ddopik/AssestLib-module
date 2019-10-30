@@ -3,9 +3,10 @@ package defaultIntializarion;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.multidex.MultiDex;
 
+
+import androidx.annotation.NonNull;
+import androidx.multidex.MultiDex;
 import com.androidnetworking.AndroidNetworking;
 import com.facebook.stetho.Stetho;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
