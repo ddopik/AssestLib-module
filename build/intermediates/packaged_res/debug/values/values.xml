@@ -73,4 +73,12 @@
     <declare-styleable name="CollapsingImageBehavior">
         <attr format="reference" name="collapsedTarget"/>
     </declare-styleable>
+    <declare-styleable name="CustomRecyclerView">
+        <attr format="enum" name="orientation">
+            <enum name="horizontal" value="0"/>
+            <enum name="vertical" value="1"/>
+            <enum name="grid" value="2"/>
+        </attr>
+        <attr format="integer" name="span_size"/>
+    </declare-styleable>
 </resources>

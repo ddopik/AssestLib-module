@@ -15,23 +15,16 @@ import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.networkmodule.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -109,7 +102,7 @@ public class ImageUtils {
 
     public static AlertDialog.Builder getPhotoChooserDialog(final Activity activity, final int randomNumber) {
 
-        CharSequence photoChooserOptions[] = new CharSequence[]{activity.getResources().getString(R.string.general_photo_chooser_camera), activity.getResources().getString(R.string.general_photo_chooser_gallery)};
+        CharSequence[] photoChooserOptions = new CharSequence[]{activity.getResources().getString(R.string.general_photo_chooser_camera), activity.getResources().getString(R.string.general_photo_chooser_gallery)};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(activity.getResources().getString(R.string.general_photo_chooser_title));

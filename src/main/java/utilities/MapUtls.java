@@ -13,11 +13,12 @@ import android.graphics.Point;
 import android.location.Location;
 import android.os.Handler;
 import android.os.SystemClock;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.networkmodule.R;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -49,9 +50,7 @@ public class MapUtls {
 
     public static boolean isLocationPermissionGranted(Context context) {
         int permissionCheck = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
-        if (permissionCheck == PackageManager.PERMISSION_DENIED)
-            return false;
-        return true;
+        return permissionCheck != PackageManager.PERMISSION_DENIED;
     }
 
     public static LatLng getMyCurrentLocation(Location mLastLocation, GoogleApiClient mGoogleApiClient, Context context) {

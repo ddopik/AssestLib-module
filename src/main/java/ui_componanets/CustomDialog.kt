@@ -30,8 +30,8 @@ class CustomDialog(val activity: Activity) : Dialog(activity) {
 
         fun getInstance(activity: Activity,dialogOption:DialogOption ): CustomDialog {
             val customDialog = CustomDialog(activity)
-            customDialog.dialogOption=dialogOption;
-            return customDialog;
+            customDialog.dialogOption = dialogOption
+            return customDialog
         }
     }
 
@@ -63,7 +63,7 @@ class CustomDialog(val activity: Activity) : Dialog(activity) {
     }
 
     fun initView() {
-        custom_dialog_content.setText(customDialogContent);
+        custom_dialog_content.text = customDialogContent
     }
 
     fun initListener() {
@@ -84,8 +84,8 @@ class CustomDialog(val activity: Activity) : Dialog(activity) {
 
      interface OnCustomDialogPositiveClick {
         fun onPositiveClicked()
-         fun onNectiveClicked();
-    }
+         fun onNectiveClicked()
+     }
 
     enum class DialogOption{
         OPTION_1,

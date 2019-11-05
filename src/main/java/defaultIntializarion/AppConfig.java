@@ -1,18 +1,16 @@
 package defaultIntializarion;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
-
 import androidx.annotation.NonNull;
 import androidx.multidex.MultiDex;
+
 import com.androidnetworking.AndroidNetworking;
 import com.facebook.stetho.Stetho;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import java.io.File;
-import java.util.LinkedList;
 
 import defaultIntializarion.realm.RealmConfigFile;
 import defaultIntializarion.realm.RealmDbMigration;
@@ -38,7 +36,7 @@ public class AppConfig extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        this.app = this;
+        app = this;
         MultiDex.install(app);
 
 //        initRealm(); //--> [1]order is must

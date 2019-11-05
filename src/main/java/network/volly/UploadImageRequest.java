@@ -73,8 +73,8 @@ public class UploadImageRequest<T> extends JsonRequest<T> {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
-        this.imagePath = imagePath;
-        this.bitmapData = bitmapData;
+        UploadImageRequest.imagePath = imagePath;
+        UploadImageRequest.bitmapData = bitmapData;
         this.mImageParameterName = imageParameterName;
         this.mimeType = "multipart/form-data;boundary=" + boundary;
 

@@ -1,0 +1,246 @@
+package ui_componanets.widgets;
+
+import android.content.Context;
+import android.graphics.Color;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.util.AttributeSet;
+import android.view.View;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import bases.commonmodel.Business;
+import bases.commonmodel.MentionedUser;
+import bases.commonmodel.Photographer;
+import utilities.UserType;
+
+/**
+ * Created by Abdalla maged
+ * on 03,February,2019
+ */
+public class CustomAutoCompleteTextView extends androidx.appcompat.widget.AppCompatAutoCompleteTextView {
+
+    public List<Photographer> currentMentionedPhotoGrapherList = new ArrayList<>();
+    public List<Business> currentMentionedBusiness = new ArrayList<>();
+
+    public CustomAutoCompleteTextView(Context context) {
+        super(context);
+
+    }
+
+    public CustomAutoCompleteTextView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+
+
+    }
+
+    public CustomAutoCompleteTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    protected void replaceText(CharSequence text) {
+
+    }
+
+    @Override
+    public void dismissDropDown() {
+        super.dismissDropDown();
+    }
+
+
+    public void handleMentionedCommentBody(int mentionedUserPosition, List<MentionedUser> mentionedUserList) {
+
+
+        //position where we will insert our new mentioned  user
+        int IndicatorPosition = getText().toString().lastIndexOf("@", getSelectionStart());
+        int searchKeysCount = getSelectionStart() - IndicatorPosition;
+        /**
+         * User has selected "Mentioned user" from mentionList After writing The "@" symbol
+         * now we convert this selection to the predefined scheme in order to send it through Api
+         * then add it to our mentionList for later injecting
+         * **/
+        if (IndicatorPosition >= 0) {
+
+            if (mentionedUserList.get(mentionedUserPosition).getMentionedType().equals("type_1")) {
+                Photographer photographer = new Photographer();
+                photographer.id = mentionedUserList.get(mentionedUserPosition).getMentionedUserId();
+                photographer.fullName = mentionedUserList.get(mentionedUserPosition).getMentionedUserName();
+                photographer.setMentionedImage(mentionedUserList.get(mentionedUserPosition).getMentionedImage());
+                currentMentionedPhotoGrapherList.add(photographer);
+                //////////
+
+                setUserSpannable(getPhotoGrapherClicableSpanObj(photographer), IndicatorPosition, searchKeysCount);
+
+                //////////
+
+
+            } else if (mentionedUserList.get(mentionedUserPosition).getMentionedType() == UserType.USER_TYPE_BUSINESS) {
+
+                Business business = new Business();
+                business.id = mentionedUserList.get(mentionedUserPosition).getMentionedUserId();
+                business.userName = mentionedUserList.get(mentionedUserPosition).getMentionedUserName();
+                business.setMentionedImage(mentionedUserList.get(mentionedUserPosition).getMentionedImage());
+                currentMentionedBusiness.add(business);
+                setUserSpannable(getBusinessClicableSpanObj(business), IndicatorPosition, searchKeysCount);
+
+            }
+
+
+        }
+
+
+    }
+
+    private void setUserSpannable(UserClickableSpan userSpannable, int position, int oldSearchKeysCount) {
+        CharSequence charSequence = TextUtils.concat(getText());
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(charSequence);
+        int startPosition = position;
+
+        if (startPosition <= 0) {
+            startPosition = 0;
+        }
+        int endPosition = startPosition + userSpannable.userName.length() - 1;
+        spannableStringBuilder.insert(startPosition, userSpannable.userName);
+        spannableStringBuilder.setSpan(userSpannable, startPosition, endPosition, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableStringBuilder.append(" ");
+        spannableStringBuilder.delete(endPosition + 1, endPosition + oldSearchKeysCount + 1);
+        setClickable(true);
+        setMovementMethod(LinkMovementMethod.getInstance());
+        setText(spannableStringBuilder);
+
+        setSelection(endPosition + 1);
+        dismissDropDown();
+    }
+
+
+    private UserClickableSpan getPhotoGrapherClicableSpanObj(Photographer photographer) {
+
+        ///////PhotoGrapher CallBack
+        UserClickableSpan photoGrapherClickableSpan = new UserClickableSpan() {
+
+
+            @Override
+            public void onClick(View view) {
+//                Intent intent = new Intent(getContext(), UserProfileActivity.class);
+//                intent.putExtra(UserProfileActivity.USER_ID, photographer.id);
+//                intent.putExtra(UserProfileActivity.USER_TYPE, Constants.UserType.USER_TYPE_PHOTOGRAPHER);
+//                getContext().startActivity(intent);
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+                ds.setColor(Color.BLUE); // specific color for this link
+            }
+        };
+        photoGrapherClickableSpan.userId = photographer.id.toString();
+        photoGrapherClickableSpan.userName = photographer.fullName + " ";
+//        photoGrapherClickableSpan.userType = Constants.UserType.USER_TYPE_PHOTOGRAPHER;
+        return photoGrapherClickableSpan;
+    }
+
+    private UserClickableSpan getBusinessClicableSpanObj(Business business) {
+
+        ///////PhotoGrapher CallBack
+        UserClickableSpan photoGrapherClickableSpan = new UserClickableSpan() {
+
+
+            @Override
+            public void onClick(View view) {
+//                Intent intent = new Intent(getContext(), UserProfileActivity.class);
+//                intent.putExtra(UserProfileActivity.USER_ID, business.id);
+//                intent.putExtra(UserProfileActivity.USER_TYPE, Constants.UserType.USER_TYPE_BUSINESS);
+//                getContext().startActivity(intent);
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+                ds.setColor(Color.MAGENTA); // specific color for this link
+            }
+        };
+        photoGrapherClickableSpan.userId = business.id.toString();
+        photoGrapherClickableSpan.userName = business.firstName + " " + business.lastName + " ";
+//        photoGrapherClickableSpan.userType = Constants.UserType.USER_TYPE_PHOTOGRAPHER;
+        return photoGrapherClickableSpan;
+    }
+
+    public String prepareCommentToSend() {
+
+        UserClickableSpan[] clickableSpansList = getText().getSpans(0, getText().length(), UserClickableSpan.class);
+
+        String oldCommentVal = getText().toString();
+        String newCommentValue = "";
+
+        UserClickableSpan[] clickableSpansListSorted = sortMentionListRanges(clickableSpansList);
+
+        //handle multiple mentions
+        for (int i = 0; i < clickableSpansListSorted.length; i++) {
+            if (clickableSpansListSorted[i].userType.equals(UserType.USER_TYPE_PHOTOGRAPHER)) {
+                int startPoint = getText().getSpanStart(clickableSpansListSorted[i]);
+                int endPoint = getText().getSpanEnd(clickableSpansListSorted[i]);
+
+                String after = "";
+                String before;
+
+                if (i == 0) {
+                    before = oldCommentVal.substring(0, startPoint);
+                    if (clickableSpansListSorted.length - 1 == i) {
+                        after = oldCommentVal.substring(endPoint);
+                    }
+
+                } else {
+                    //get spannable  string full range from specified point
+                    //in order to get spannable end point
+                    int previousSegmentEndPoint = getText().getSpanEnd(clickableSpansListSorted[i - 1]);
+                    before = oldCommentVal.substring(previousSegmentEndPoint, startPoint);
+                }
+
+
+                String mentionedId;
+                if (oldCommentVal.substring(endPoint + 1).equals(" ") && (endPoint) < oldCommentVal.length()) {
+                    mentionedId = "@0_" + clickableSpansListSorted[i].userId;
+                } else {
+                    mentionedId = "@0_" + clickableSpansListSorted[i].userId + " ";
+                }
+
+                newCommentValue = newCommentValue + before + mentionedId + after;
+            }
+
+        }
+
+        if (newCommentValue.length() > 0) {
+            return newCommentValue;
+        } else {
+            return oldCommentVal;
+        }
+    }
+
+    private UserClickableSpan[] sortMentionListRanges(UserClickableSpan[] clickableSpansList) {
+
+
+        int len = clickableSpansList.length;
+        for (int i = 0; i < clickableSpansList.length; i++) {
+            for (int j = 0; j < clickableSpansList.length - 1; j++) {
+                UserClickableSpan userClickableSpansTemp;
+                if (getText().getSpanStart(clickableSpansList[j]) > getText().getSpanStart(clickableSpansList[j + 1])) {
+                    userClickableSpansTemp = clickableSpansList[j];
+                    clickableSpansList[j] = clickableSpansList[j + 1];
+                    clickableSpansList[j + 1] = userClickableSpansTemp;
+
+                }
+
+
+            }
+        }
+        return clickableSpansList;
+    }
+
+}

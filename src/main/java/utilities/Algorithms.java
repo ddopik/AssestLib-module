@@ -2,12 +2,10 @@ package utilities;
 
 import android.util.Log;
 
-import java.util.ArrayList;
-
 public class Algorithms {
 
 
-    private static int draftArr[] = {1, 2, 3, 5, 6};
+    private static int[] draftArr = {1, 2, 3, 5, 6};
 
     public static void main() {
 
@@ -16,7 +14,7 @@ public class Algorithms {
 
     }
 
-    private static void BinarySearch(int arr[], int arrSize, int query) {
+    private static void BinarySearch(int[] arr, int arrSize, int query) {
 
         int midIndex = arrSize / 2;
         Log.e("Algorithms","mid is--->"+midIndex);

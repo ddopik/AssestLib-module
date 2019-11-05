@@ -10,10 +10,10 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
- import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,9 +78,7 @@ public abstract class PermissionUtil {
     private static boolean shouldAskPermission(Context context, String permission){
         if (shouldAskPermission()) {
             int permissionResult = ActivityCompat.checkSelfPermission(context, permission);
-            if (permissionResult != PackageManager.PERMISSION_GRANTED) {
-                return true;
-            }
+            return permissionResult != PackageManager.PERMISSION_GRANTED;
         }
         return false;
     }
@@ -296,7 +294,7 @@ public abstract class PermissionUtil {
 
 
     public interface ExternalPermeation_Cancel_Method {
-        public void ExternalPermeation_Cancel_Method();
+        void ExternalPermeation_Cancel_Method();
     }
 
 

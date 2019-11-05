@@ -24,8 +24,8 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-
 import androidx.fragment.app.Fragment;
+
 import com.example.networkmodule.R;
 
 import java.io.IOException;
@@ -68,7 +68,7 @@ public class PhoneContactList extends Fragment {
         mainView=inflater.inflate(R.layout.phone_contact_activity, container, false);
         selectUsers = new ArrayList<UserViewHolder>();
         resolver = getActivity().getContentResolver();
-        listView = (ListView) mainView.findViewById(R.id.contacts_list);
+        listView = mainView.findViewById(R.id.contacts_list);
 
         // Check the SDK version and whether the permission is already granted or not.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getActivity().checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
@@ -84,7 +84,7 @@ public class PhoneContactList extends Fragment {
         }
 
 
-        search = (SearchView) mainView.findViewById(R.id.searchView);
+        search = mainView.findViewById(R.id.searchView);
         //*** setOnQueryTextListener ***
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 

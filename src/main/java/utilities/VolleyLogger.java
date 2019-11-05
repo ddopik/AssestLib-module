@@ -54,7 +54,7 @@ public final class VolleyLogger {
      * @param paramsOrHeadersMap Request Headers or Parameters
      */
     private void logMap(String messageName, Map<String, String> paramsOrHeadersMap) {
-        StringBuilder readableMapString = new StringBuilder("");
+        StringBuilder readableMapString = new StringBuilder();
         for (String key : paramsOrHeadersMap.keySet()) {
             readableMapString.append(key.trim()).append(" : ").append(paramsOrHeadersMap.get(key).trim());
             readableMapString.append("&");

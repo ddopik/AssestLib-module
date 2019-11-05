@@ -15,7 +15,7 @@ abstract class k_PermationController {
     companion object {
 
         @TargetApi(Build.VERSION_CODES.M)
-        public fun checkPermission(context: Context, permation: String, listner: PermissionAskListener) {
+        fun checkPermission(context: Context, permation: String, listner: PermissionAskListener) {
 /*
         * If permission is not granted
         * */
@@ -24,23 +24,23 @@ abstract class k_PermationController {
             * If permission denied previously
             * */
                 if ((context as Activity).shouldShowRequestPermissionRationale(permation)) {
-                    listner.onPermissionPreviouslyDenied();
+                    listner.onPermissionPreviouslyDenied()
                 } else {
                     /*
                     * Permission denied or first time requested
                     * */
                     if (PrefUtils.isFirstTimeAskingPermission(context, permation)) {
-                        PrefUtils.firstTimeAskingPermission(context, permation, false);
-                        listner.onPermissionAsk();
+                        PrefUtils.firstTimeAskingPermission(context, permation, false)
+                        listner.onPermissionAsk()
                     } else {
                         /*
                         * Handle the feature without permission or ask user to manually allow permission
                         * */
-                        listner.onPermissionDisabled();
+                        listner.onPermissionDisabled()
                     }
                 }
             } else {
-                listner.onPermissionGranted();
+                listner.onPermissionGranted()
             }
         }
 
@@ -53,7 +53,7 @@ abstract class k_PermationController {
 
         private  fun shouldAskPermission (context :Context ,permission : String ) :Boolean{
             if (shouldAskPermission()) {
-                val permissionResult  = ActivityCompat.checkSelfPermission(context, permission);
+                val permissionResult = ActivityCompat.checkSelfPermission(context, permission)
                 if (permissionResult != PackageManager.PERMISSION_GRANTED) {
                     return true
                 }
@@ -77,7 +77,7 @@ abstract class k_PermationController {
     * 4.  Above M, if the permission is disabled by device policy or the user checked "Never ask again"
     *     check box on previous request permission, onPermissionDisabled() would be called.
     * */
-    public interface PermissionAskListener {
+    interface PermissionAskListener {
 
         /*
             * Callback to ask permission
@@ -87,7 +87,7 @@ abstract class k_PermationController {
         /*
                 * Callback on permission denied
                 * */
-        fun onPermissionPreviouslyDenied();
+        fun onPermissionPreviouslyDenied()
 
         /*
                 * Callback on permission "Never show again" checked and denied

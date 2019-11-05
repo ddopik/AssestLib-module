@@ -19,15 +19,14 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.example.networkmodule.R;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import ui_componanets.ContactList.viewHolder.UserViewHolder;
 import ui_componanets.ContactList.util.RoundImage;
+import ui_componanets.ContactList.viewHolder.UserViewHolder;
 
 
 /**
@@ -78,12 +77,12 @@ public class UserContactAdapter extends BaseAdapter {
 
         v = new ViewHolder();
 
-        v.title = (TextView) view.findViewById(R.id.name);
-        v.check = (CheckBox) view.findViewById(R.id.check);
-        v.phone = (TextView) view.findViewById(R.id.no);
-        v.imageView = (ImageView) view.findViewById(R.id.pic);
+        v.title = view.findViewById(R.id.name);
+        v.check = view.findViewById(R.id.check);
+        v.phone = view.findViewById(R.id.no);
+        v.imageView = view.findViewById(R.id.pic);
 
-        final UserViewHolder data = (UserViewHolder) _data.get(i);
+        final UserViewHolder data = _data.get(i);
         v.title.setText(data.getName());
         v.check.setChecked(data.getCheckedBox());
         v.phone.setText(data.getPhone());

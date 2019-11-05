@@ -255,7 +255,7 @@ public class VolleySingleton {
      */
     private void logMap(String messageName, Map<String, String> paramsOrHeadersMap) {
         try {
-            StringBuilder readableMapString = new StringBuilder("");
+            StringBuilder readableMapString = new StringBuilder();
             for (String key : paramsOrHeadersMap.keySet()) {
 
 

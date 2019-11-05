@@ -13,13 +13,14 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.provider.Settings;
- import android.util.Log;
+import android.util.Log;
+
+import androidx.annotation.RequiresPermission;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import androidx.annotation.RequiresPermission;
 import defaultIntializarion.AppConfig;
 
 /**
@@ -309,10 +310,7 @@ public final class LocationUtils {
             return true;
         } else if (isNewer && !isLessAccurate) {
             return true;
-        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
-            return true;
-        }
-        return false;
+        } else return isNewer && !isSignificantlyLessAccurate && isFromSameProvider;
     }
 
     /**

@@ -2,7 +2,6 @@ package ui_componanets.MultiSelectList.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.core.content.ContextCompat;
 
 import com.example.networkmodule.R;
 
@@ -22,7 +23,7 @@ import io.realm.RealmResults;
 
 public abstract class MultiSelectListAdapter extends BaseAdapter {
 
-    final boolean isSelected[];
+    final boolean[] isSelected;
     private Context mContext;
     private RealmResults sourcesList;
 
@@ -91,9 +92,9 @@ public abstract class MultiSelectListAdapter extends BaseAdapter {
 //            convertView  = inflater.inflate(R.layout.feed_item, null);
             convertView = LayoutInflater.from(this.mContext).inflate(R.layout.source_item, null);
             viewHolder = new ViewHolder(convertView);
-            viewHolder.sourceListContainer = (LinearLayout) convertView.findViewById(R.id.source_row_container);
-            viewHolder.source_name = (CheckedTextView) convertView.findViewById(R.id.row_list_checkedtextview);
-            viewHolder.newsImage = (ImageView) convertView.findViewById(R.id.row_list_checkbox_image);
+            viewHolder.sourceListContainer = convertView.findViewById(R.id.source_row_container);
+            viewHolder.source_name = convertView.findViewById(R.id.row_list_checkedtextview);
+            viewHolder.newsImage = convertView.findViewById(R.id.row_list_checkbox_image);
 
             convertView.setTag(viewHolder);
         } else {
