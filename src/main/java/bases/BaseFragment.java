@@ -15,9 +15,10 @@ public abstract class BaseFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initPresenter();
-    }
+     }
 
-    protected abstract void initPresenter();
-    protected abstract void initViews();
+
+     protected abstract void initObservers();
+
+
 }

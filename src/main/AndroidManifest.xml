@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
     package="com.example.networkmodule">
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />                  <!-- verify if connected to the internet -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />      <!-- verify if connected to any network -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />      <!-- verify location using GPS, give precise location -->

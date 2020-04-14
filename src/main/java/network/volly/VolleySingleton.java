@@ -14,20 +14,32 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpStack;
 import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.security.ProviderInstaller;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import network.volly.response_module.BaseApiResponse;
 import network.volly.response_module.BaseResponse;
 import network.volly.response_module.CreateOrderResponse;
 import network.volly.response_module.DirectionResponse;
-import network.volly.response_module.LoginResponse;
+import network.volly.response_module.VollyLoginResponse;
+
+import static com.google.android.gms.security.ProviderInstaller.*;
 
 /**
  * Created by ddopik..@_@
@@ -65,7 +77,7 @@ public class VolleySingleton {
             try {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
                     // Use a socket factory that removes sslv3 and add TLS1.2
-//                    stack = new HurlStack(null, new TLSSocketFactory());
+                    stack = new HurlStack(null, new TLSSocketFactory());
                 } else {
                     stack = new HurlStack();
                 }
@@ -131,7 +143,7 @@ public class VolleySingleton {
 
     }
 
-    public static String getErrorMessage(String json, String key) {
+    private static String getErrorMessage(String json, String key) {
         String trimmedString = null;
 
         try {
@@ -151,7 +163,7 @@ public class VolleySingleton {
      *
      * @param tag associated with the Volley requests to be cancelled
      */
-    public void cancelAllRequests(String tag) {
+    private void cancelAllRequests(String tag) {
         if (mRequestQueue != null && tag != null && !TextUtils.isEmpty(tag)) {
             mRequestQueue.cancelAll(tag);
         }
@@ -203,7 +215,7 @@ public class VolleySingleton {
 
     //    Retry Request
     // in case callback was broken UnSpecified Content Type ....
-    public boolean retryRequest(Request request) {
+    boolean retryRequest(Request request) {
         if (retryCount >= MAX_RETRY_COUNT) {
             cancelAllRequests(request.getUrl());
             retryCount = 1;
@@ -215,7 +227,7 @@ public class VolleySingleton {
     }
 
 
-    public Request<?> makeGsonRequest(int method, Class<?> clazz, String url, Response.Listener<?> listener, Response.ErrorListener errorListener, Map<String, String> headers, Map<String, String> params) {
+    private Request<?> makeGsonRequest(int method, Class<?> clazz, String url, Response.Listener<?> listener, Response.ErrorListener errorListener, Map<String, String> headers, Map<String, String> params) {
 //        mRequestQueue.cancelAll(TAG)
         GsonRequest gsonRequest = new GsonRequest(method, url, clazz, listener, errorListener, headers, params);
 //        Logging the request parameters
@@ -243,7 +255,7 @@ public class VolleySingleton {
             logMap("params", params);
         if (headers != null && !headers.isEmpty())
             logMap("headers", headers);
-//Use the url as the request tag to be able to remove a specific request at anytime
+              //Use the url as the request tag to be able to remove a specific request at anytime
         return addRequest(gsonRequest, url);
     }
 
@@ -302,34 +314,42 @@ public class VolleySingleton {
     }
 
 
-    public Request createOrder(final BaseApiResponse<CreateOrderResponse> apiResponse, Map<String, String> parameters) {
-        Log.e(TAG, "createOrder()---Parameters--->" + parameters.toString());
-//        activity.showProgressDialog();
-//        setToken(VOOPrefManager.getUserToken(activity));
-        return makeGsonRequest(Request.Method.POST, CreateOrderResponse.class, BASEURL + "",
-                new Response.Listener<CreateOrderResponse>() {
+//    public Request createOrder(final BaseApiResponse<CreateOrderResponse> apiResponse, Map<String, String> parameters) {
+//         return ;
+//    }
+
+    /**
+     * @use handle response from future request, in my case JsonObject.
+     */
+    public Observable<VollyLoginResponse> VollyTestRequest( Map<String, String> parameters) {
+        RequestFuture<VollyLoginResponse> future = RequestFuture.newFuture();
+
+
+        VolleySingleton.getInstance().addRequest(makeGsonRequest(Request.Method.POST, VollyLoginResponse.class,"https://nfc.spiderholidays.co/en/Api/login_check",
+                new Response.Listener<VollyLoginResponse>() {
                     @Override
-                    public void onResponse(CreateOrderResponse response) {
-                        apiResponse.onSuccess(response);
-                    }
+                    public void onResponse(VollyLoginResponse response) {
+                        Log.e(TAG,"VollyTestRequest ---> succese"+  response.getLoginData().getUserData().getName());
+                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        apiResponse.onFailure(error);
+                        Log.e(TAG,"VollyTestRequest ---> Error");
                     }
                 },
                 getRequestHeaders(),
                 parameters
-        );
+        ));
+        return Observable.fromFuture(future, MAX_RETRY_COUNT, TimeUnit.SECONDS, Schedulers.io());
     }
 
-    public Request login(final BaseApiResponse<LoginResponse> apiResponse,
+    public Request login(final BaseApiResponse<VollyLoginResponse> apiResponse,
                          Map<String, String> parameters) {
 
-        return makeGsonRequest(Request.Method.POST,LoginResponse.class, BASEURL + LOGIN, new Response.Listener<LoginResponse>() {
+        return makeGsonRequest(Request.Method.POST, VollyLoginResponse.class, BASEURL + LOGIN, new Response.Listener<VollyLoginResponse>() {
             @Override
-            public void onResponse(LoginResponse response) {
+            public void onResponse(VollyLoginResponse response) {
                 apiResponse.onSuccess(response);
                 Log.e("NetworkManager", "login()----> Response is--->" + response.toString());
             }

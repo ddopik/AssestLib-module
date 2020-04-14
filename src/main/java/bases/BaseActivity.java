@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 
 public  abstract  class BaseActivity extends AppCompatActivity {
 
-    protected abstract void addFragment(Fragment fragment, String title, String tag);
+//    protected abstract void addFragment(Fragment fragment, String title, String tag);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

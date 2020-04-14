@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.widget.TextClock;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -61,9 +62,9 @@ public abstract class PermissionUtil {
                 * Permission denied or first time requested
                 * */
                 if (PrefUtils.isFirstTimeAskingPermission(context, permission)) {
-                    PrefUtils.firstTimeAskingPermission(context, permission, false);
+                     PrefUtils.firstTimeAskingPermission(context, permission, false);
                     listener.onPermissionAsk();
-                } else {
+                  } else {
                     /*
                     * Handle the feature without permission or ask user to manually allow permission
                     * */
